@@ -4,7 +4,7 @@
 	# Serve static files directly
 	@static {
 		file
-		path *.js *.css *.json *.png *.jpg *.jpeg *.gif *.svg *.ico *.woff *.woff2 *.ttf *.eot
+		path *.js *.css *.json *.png *.jpg *.jpeg *.gif *.svg *.ico *.woff *.woff2 *.ttf *.eot *.mp4 *.webm
 	}
 	handle @static {
 		header Cache-Control "public, max-age=31536000, immutable"

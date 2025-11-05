@@ -5,7 +5,9 @@ import './watch-page.css';
 
 export default function WatchPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const bumperRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
+  const [showBumper, setShowBumper] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.7);
   const [isMuted, setIsMuted] = useState(false);
@@ -15,6 +17,19 @@ export default function WatchPage() {
   const controlsTimeoutRef = useRef<number | null>(null);
 
   const streamUrl = `${CONFIG.RELAY_BASE_URL}/hls/stream.m3u8`;
+
+  // Handle bumper video end
+  useEffect(() => {
+    const bumper = bumperRef.current;
+    if (!bumper) return;
+
+    const handleBumperEnd = () => {
+      setShowBumper(false);
+    };
+
+    bumper.addEventListener('ended', handleBumperEnd);
+    return () => bumper.removeEventListener('ended', handleBumperEnd);
+  }, []);
 
   // Auto-hide controls after inactivity
   const resetControlsTimeout = () => {
@@ -29,8 +44,10 @@ export default function WatchPage() {
     }, 3000);
   };
 
-  // Initialize HLS player
+  // Initialize HLS player (only after bumper finishes)
   useEffect(() => {
+    if (showBumper) return; // Wait for bumper to finish
+
     const video = videoRef.current;
     if (!video || !CONFIG.RELAY_BASE_URL) {
       setStatus('offline');
@@ -82,7 +99,7 @@ export default function WatchPage() {
     } else {
       setStatus('error');
     }
-  }, [streamUrl]);
+  }, [streamUrl, showBumper]);
 
   // Handle fullscreen changes
   useEffect(() => {
@@ -144,28 +161,44 @@ export default function WatchPage() {
         }
       }}
     >
-      {/* Header */}
-      <div className={`watch-header ${showControls || !isPlaying ? 'visible' : 'hidden'}`}>
-        <img src="/icon-180.png" alt="RalphTV" className="watch-logo" />
-        <div className="watch-info">
-          <div className="watch-title">RalphTV</div>
-          {status === 'playing' && <div className="watch-live">● LIVE</div>}
+      {/* Bumper Video */}
+      {showBumper && (
+        <video
+          ref={bumperRef}
+          src="/bumper.mp4"
+          playsInline
+          autoPlay
+          muted={false}
+          className="watch-video watch-bumper"
+        />
+      )}
+
+      {/* Header - only show after bumper */}
+      {!showBumper && (
+        <div className={`watch-header ${showControls || !isPlaying ? 'visible' : 'hidden'}`}>
+          <img src="/icon-180.png" alt="RalphTV" className="watch-logo" />
+          <div className="watch-info">
+            <div className="watch-title">RalphTV</div>
+            {status === 'playing' && <div className="watch-live">● LIVE</div>}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Video Player */}
-      <video
-        ref={videoRef}
-        playsInline
-        autoPlay
-        muted={false}
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
-        className="watch-video"
-      />
+      {/* Stream Video Player - only show after bumper */}
+      {!showBumper && (
+        <video
+          ref={videoRef}
+          playsInline
+          autoPlay
+          muted={false}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          className="watch-video"
+        />
+      )}
 
-      {/* Status Overlay - only show when NOT playing */}
-      {status !== 'playing' && (
+      {/* Status Overlay - only show when NOT playing and after bumper */}
+      {!showBumper && status !== 'playing' && (
         <div className="watch-status-overlay">
           {status === 'loading' && (
             <div className="watch-status-content">
@@ -190,8 +223,9 @@ export default function WatchPage() {
         </div>
       )}
 
-      {/* Controls */}
-      <div className={`watch-controls ${showControls || !isPlaying ? 'visible' : 'hidden'}`}>
+      {/* Controls - only show after bumper */}
+      {!showBumper && (
+        <div className={`watch-controls ${showControls || !isPlaying ? 'visible' : 'hidden'}`}>
         <div className="watch-controls-row">
           {/* Play/Pause */}
           <button
@@ -265,6 +299,7 @@ export default function WatchPage() {
           </button>
         </div>
       </div>
+      )}
     </div>
   );
 }
