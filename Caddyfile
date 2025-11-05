@@ -1,37 +1,18 @@
 :{$PORT} {
 	root * /app/dist
-
-	# Serve static files directly
-	@static {
-		file
-		path *.js *.css *.json *.png *.jpg *.jpeg *.gif *.svg *.ico *.woff *.woff2 *.ttf *.eot *.mp4 *.webm
-	}
-	handle @static {
-		header Cache-Control "public, max-age=31536000, immutable"
-		file_server
-	}
-
-	# Service worker should not be cached
-	@sw {
-		path /sw.js
-	}
-	handle @sw {
-		header Cache-Control "no-cache, no-store, must-revalidate"
-		file_server
-	}
-
-	# Manifest should not be cached
-	@manifest {
-		path /manifest.json
-	}
-	handle @manifest {
-		header Cache-Control "no-cache, no-store, must-revalidate"
-		file_server
-	}
-
-	# Everything else serves index.html (SPA)
-	try_files {path} /index.html
-	file_server
-
 	encode gzip
+
+	# Serve files directly if they exist
+	@notFile {
+		not file
+	}
+
+	# Service worker and manifest should not be cached
+	header /sw.js Cache-Control "no-cache, no-store, must-revalidate"
+	header /manifest.json Cache-Control "no-cache, no-store, must-revalidate"
+
+	# Fallback to index.html for SPA routing (only if file doesn't exist)
+	rewrite @notFile /index.html
+
+	file_server
 }
