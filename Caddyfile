@@ -1,4 +1,4 @@
-:$PORT {
+:{$PORT} {
 	root * /app/dist
 
 	# Serve static files directly
