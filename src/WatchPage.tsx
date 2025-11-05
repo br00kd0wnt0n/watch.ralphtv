@@ -163,14 +163,26 @@ export default function WatchPage() {
     >
       {/* Bumper Video */}
       {showBumper && (
-        <video
-          ref={bumperRef}
-          src="/bumper.mp4"
-          playsInline
-          autoPlay
-          muted={false}
-          className="watch-video watch-bumper"
-        />
+        <>
+          <video
+            ref={bumperRef}
+            src="/bumper.mp4"
+            playsInline
+            autoPlay
+            muted
+            className="watch-video watch-bumper"
+          />
+          <div
+            className="watch-tap-to-unmute"
+            onClick={() => {
+              if (bumperRef.current) {
+                bumperRef.current.muted = false;
+              }
+            }}
+          >
+            Tap to unmute
+          </div>
+        </>
       )}
 
       {/* Header - only show after bumper */}
