@@ -1,0 +1,357 @@
+/* Watch Page Styles - Modern & On-Brand */
+
+.watch-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  touch-action: manipulation;
+}
+
+/* Video Element - Responsive to rotation */
+.watch-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+/* Header */
+.watch-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: env(safe-area-inset-top, 12px) 16px 12px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 70%, transparent 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.watch-header.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.watch-header.hidden {
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+.watch-logo {
+  height: 32px;
+  width: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.watch-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.watch-title {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.watch-live {
+  color: #ff0066;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Status Overlay */
+.watch-status-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.watch-status-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  padding: 32px;
+}
+
+/* Spinner Animation */
+.watch-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #ff0066;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.watch-error-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #ff0066;
+  border: 2px solid #ff0066;
+  border-radius: 50%;
+  font-weight: 300;
+}
+
+.watch-error-hint {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+}
+
+/* Controls */
+.watch-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 16px calc(env(safe-area-inset-bottom, 16px) + 8px);
+  background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 70%, transparent 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.watch-controls.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.watch-controls.hidden {
+  opacity: 0;
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+.watch-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Control Buttons */
+.watch-control-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+
+.watch-control-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
+}
+
+.watch-control-btn:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.watch-control-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.watch-control-play {
+  background: rgba(255, 0, 102, 0.2);
+  border: 1.5px solid rgba(255, 0, 102, 0.5);
+}
+
+.watch-control-play:hover {
+  background: rgba(255, 0, 102, 0.3);
+  border-color: rgba(255, 0, 102, 0.8);
+  box-shadow: 0 0 20px rgba(255, 0, 102, 0.3);
+}
+
+.watch-control-play svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Volume Group */
+.watch-volume-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  max-width: 200px;
+}
+
+/* Modern Volume Slider */
+.watch-volume-slider {
+  flex: 1;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.watch-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.watch-volume-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.watch-volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 12px rgba(255, 0, 102, 0.6);
+}
+
+.watch-volume-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 12px rgba(255, 0, 102, 0.6);
+}
+
+/* Track fill effect */
+.watch-volume-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    #ff0066 0%,
+    #ff0066 var(--volume-percent, 70%),
+    rgba(255, 255, 255, 0.15) var(--volume-percent, 70%),
+    rgba(255, 255, 255, 0.15) 100%
+  );
+  border-radius: 2px;
+}
+
+.watch-volume-slider::-moz-range-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+.watch-volume-slider::-moz-range-progress {
+  height: 4px;
+  background: #ff0066;
+  border-radius: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .watch-volume-group {
+    max-width: 120px;
+  }
+
+  .watch-control-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .watch-control-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (orientation: landscape) {
+  .watch-header {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .watch-controls {
+    padding-top: 12px;
+    padding-bottom: calc(env(safe-area-inset-bottom, 12px) + 4px);
+  }
+
+  .watch-logo {
+    height: 28px;
+    width: 28px;
+  }
+
+  .watch-title {
+    font-size: 14px;
+  }
+
+  .watch-live {
+    font-size: 10px;
+  }
+}
+
+/* Fix for iOS safe areas */
+@supports (padding: max(0px)) {
+  .watch-container {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
