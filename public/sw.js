@@ -1,8 +1,10 @@
 // RalphTV Watch - Service Worker
-const CACHE_NAME = 'ralphtv-watch-v1';
+const CACHE_NAME = 'ralphtv-watch-v2';
 const STATIC_ASSETS = [
   '/',
-  '/logo.png',
+  '/icon-180.png',
+  '/icon-192.png',
+  '/icon-512.png',
   '/manifest.json'
 ];
 

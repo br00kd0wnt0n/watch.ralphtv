@@ -101,7 +101,7 @@ export default function WatchPage() {
         alignItems: 'center',
         gap: '12px'
       }}>
-        <img src="/logo.png" alt="RalphTV" style={{ height: '32px' }} />
+        <img src="/icon-180.png" alt="RalphTV" style={{ height: '32px' }} />
         <div>
           <div style={{ color: '#fff', fontSize: '16px', fontWeight: '600' }}>RalphTV</div>
           <div style={{ color: '#ff0066', fontSize: '12px' }}>● LIVE</div>
