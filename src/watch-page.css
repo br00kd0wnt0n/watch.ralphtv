@@ -220,11 +220,11 @@
 /* Controls */
 .watch-controls {
   position: absolute;
-  bottom: 12px;
+  bottom: 24px;
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 16px 16px calc(env(safe-area-inset-bottom, 12px) + 8px);
+  padding: 20px 16px calc(env(safe-area-inset-bottom, 16px) + 12px);
   background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 70%, transparent 100%);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
