@@ -54,7 +54,10 @@ export default function WatchPage() {
       return;
     }
 
+    console.log('Initializing stream:', streamUrl);
+
     if (Hls.isSupported()) {
+      console.log('Using HLS.js');
       const hls = new Hls({
         enableWorker: true,
         lowLatencyMode: true,
@@ -68,35 +71,59 @@ export default function WatchPage() {
       hls.attachMedia(video);
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        console.log('HLS manifest parsed, starting playback');
         setStatus('playing');
         video.play().then(() => {
+          console.log('Video playing');
           setIsPlaying(true);
-        }).catch(() => {
+        }).catch((err) => {
+          console.error('Play failed:', err);
           setStatus('loading');
         });
       });
 
       hls.on(Hls.Events.ERROR, (_event, data) => {
+        console.error('HLS error:', data);
         if (data.fatal) {
           setStatus('error');
         }
       });
 
       return () => {
+        console.log('Cleaning up HLS');
         hls.destroy();
       };
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      // Safari native HLS
+      // Safari native HLS (iPhone)
+      console.log('Using native HLS (Safari)');
       video.src = streamUrl;
-      video.addEventListener('loadedmetadata', () => {
+
+      const handleLoadedMetadata = () => {
+        console.log('Native HLS metadata loaded');
         setStatus('playing');
         video.play().then(() => {
+          console.log('Video playing');
           setIsPlaying(true);
-        }).catch(() => {
+        }).catch((err) => {
+          console.error('Play failed:', err);
           setStatus('loading');
         });
-      });
+      };
+
+      const handleError = (err: Event) => {
+        console.error('Native HLS error:', err);
+        setStatus('error');
+      };
+
+      video.addEventListener('loadedmetadata', handleLoadedMetadata);
+      video.addEventListener('error', handleError);
+
+      return () => {
+        video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        video.removeEventListener('error', handleError);
+      };
     } else {
+      console.error('HLS not supported');
       setStatus('error');
     }
   }, [streamUrl, showBumper]);
@@ -171,16 +198,28 @@ export default function WatchPage() {
             autoPlay
             muted
             className="watch-video watch-bumper"
-          />
-          <div
-            className="watch-tap-to-unmute"
-            onClick={() => {
-              if (bumperRef.current) {
-                bumperRef.current.muted = false;
-              }
+            onError={() => {
+              console.log('Bumper failed to load, skipping to stream');
+              setShowBumper(false);
             }}
-          >
-            Tap to unmute
+          />
+          <div className="watch-bumper-controls">
+            <button
+              className="watch-bumper-btn"
+              onClick={() => {
+                if (bumperRef.current) {
+                  bumperRef.current.muted = false;
+                }
+              }}
+            >
+              🔊 Unmute
+            </button>
+            <button
+              className="watch-bumper-btn"
+              onClick={() => setShowBumper(false)}
+            >
+              Skip →
+            </button>
           </div>
         </>
       )}
