@@ -2,17 +2,7 @@
 	root * /app/dist
 	encode gzip
 
-	# Serve files directly if they exist
-	@notFile {
-		not file
-	}
-
-	# Service worker and manifest should not be cached
-	header /sw.js Cache-Control "no-cache, no-store, must-revalidate"
-	header /manifest.json Cache-Control "no-cache, no-store, must-revalidate"
-
-	# Fallback to index.html for SPA routing (only if file doesn't exist)
-	rewrite @notFile /index.html
-
+	# Try to serve the file, otherwise serve index.html
+	try_files {path} /index.html
 	file_server
 }
