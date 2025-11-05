@@ -38,7 +38,7 @@ export default function WatchPage() {
         video.play().catch(() => setStatus('loading'));
       });
 
-      hls.on(Hls.Events.ERROR, (event, data) => {
+      hls.on(Hls.Events.ERROR, (_event, data) => {
         if (data.fatal) {
           setStatus('error');
         }
