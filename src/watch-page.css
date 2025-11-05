@@ -220,11 +220,11 @@
 /* Controls */
 .watch-controls {
   position: absolute;
-  bottom: 0;
+  bottom: 12px;
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 16px 16px calc(env(safe-area-inset-bottom, 16px) + 8px);
+  padding: 16px 16px calc(env(safe-area-inset-bottom, 12px) + 8px);
   background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 70%, transparent 100%);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -311,10 +311,11 @@
   height: 4px;
   -webkit-appearance: none;
   appearance: none;
-  background: rgba(255, 255, 255, 0.15);
+  background: transparent;
   border-radius: 2px;
   outline: none;
   cursor: pointer;
+  position: relative;
 }
 
 .watch-volume-slider::-webkit-slider-thumb {
@@ -327,6 +328,9 @@
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease;
+  margin-top: -6px; /* Center on track */
+  position: relative;
+  z-index: 2;
 }
 
 .watch-volume-slider::-moz-range-thumb {
@@ -338,6 +342,8 @@
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease;
+  position: relative;
+  z-index: 2;
 }
 
 .watch-volume-slider::-webkit-slider-thumb:hover {
@@ -350,20 +356,25 @@
   box-shadow: 0 0 12px rgba(255, 0, 102, 0.6);
 }
 
-/* Track fill effect */
+.watch-volume-slider::-webkit-slider-thumb:active {
+  transform: scale(1.1);
+}
+
+.watch-volume-slider::-moz-range-thumb:active {
+  transform: scale(1.1);
+}
+
+/* Track styling */
 .watch-volume-slider::-webkit-slider-runnable-track {
+  width: 100%;
   height: 4px;
-  background: linear-gradient(
-    to right,
-    #ff0066 0%,
-    #ff0066 var(--volume-percent, 70%),
-    rgba(255, 255, 255, 0.15) var(--volume-percent, 70%),
-    rgba(255, 255, 255, 0.15) 100%
-  );
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 2px;
+  position: relative;
 }
 
 .watch-volume-slider::-moz-range-track {
+  width: 100%;
   height: 4px;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 2px;
@@ -372,6 +383,16 @@
 .watch-volume-slider::-moz-range-progress {
   height: 4px;
   background: #ff0066;
+  border-radius: 2px 0 0 2px;
+}
+
+/* Create progress fill effect with background gradient */
+.watch-volume-slider {
+  background: linear-gradient(to right,
+    #ff0066 0%,
+    #ff0066 var(--volume-percent, 70%),
+    rgba(255, 255, 255, 0.15) var(--volume-percent, 70%),
+    rgba(255, 255, 255, 0.15) 100%);
   border-radius: 2px;
 }
 
