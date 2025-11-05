@@ -84,7 +84,7 @@ export default function WatchPage() {
         levelLoadingMaxRetry: 4,
         fragLoadingTimeOut: 20000,
         fragLoadingMaxRetry: 6,
-        xhrSetup: function (xhr, url) {
+        xhrSetup: function (xhr, _url) {
           xhr.withCredentials = false; // Disable CORS credentials
         },
       });
