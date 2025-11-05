@@ -8,6 +8,8 @@ export default function WatchPage() {
   const bumperRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   const [showBumper, setShowBumper] = useState(true);
+  const [bumperEnded, setBumperEnded] = useState(false);
+  const [streamReady, setStreamReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.7);
   const [isMuted, setIsMuted] = useState(false);
@@ -24,12 +26,20 @@ export default function WatchPage() {
     if (!bumper) return;
 
     const handleBumperEnd = () => {
-      setShowBumper(false);
+      console.log('Bumper ended');
+      setBumperEnded(true);
     };
 
     bumper.addEventListener('ended', handleBumperEnd);
     return () => bumper.removeEventListener('ended', handleBumperEnd);
   }, []);
+
+  // Handle JOIN STREAM button click
+  const handleJoinStream = () => {
+    console.log('User clicked JOIN STREAM');
+    setShowBumper(false);
+    setStreamReady(true);
+  };
 
   // Auto-hide controls after inactivity
   const resetControlsTimeout = () => {
@@ -44,9 +54,9 @@ export default function WatchPage() {
     }, 3000);
   };
 
-  // Initialize HLS player (only after bumper finishes)
+  // Initialize HLS player (only after user clicks JOIN STREAM)
   useEffect(() => {
-    if (showBumper) return; // Wait for bumper to finish
+    if (!streamReady) return; // Wait for user to click JOIN STREAM
 
     const video = videoRef.current;
     if (!video || !CONFIG.RELAY_BASE_URL) {
@@ -126,7 +136,7 @@ export default function WatchPage() {
       console.error('HLS not supported');
       setStatus('error');
     }
-  }, [streamUrl, showBumper]);
+  }, [streamUrl, streamReady]);
 
   // Handle fullscreen changes
   useEffect(() => {
@@ -199,28 +209,21 @@ export default function WatchPage() {
             muted
             className="watch-video watch-bumper"
             onError={() => {
-              console.log('Bumper failed to load, skipping to stream');
-              setShowBumper(false);
+              console.log('Bumper failed to load, showing JOIN button');
+              setBumperEnded(true);
             }}
           />
-          <div className="watch-bumper-controls">
-            <button
-              className="watch-bumper-btn"
-              onClick={() => {
-                if (bumperRef.current) {
-                  bumperRef.current.muted = false;
-                }
-              }}
-            >
-              🔊 Unmute
-            </button>
-            <button
-              className="watch-bumper-btn"
-              onClick={() => setShowBumper(false)}
-            >
-              Skip →
-            </button>
-          </div>
+          {/* Show JOIN STREAM button after bumper ends */}
+          {bumperEnded && (
+            <div className="watch-join-overlay">
+              <button
+                className="watch-join-btn"
+                onClick={handleJoinStream}
+              >
+                JOIN STREAM
+              </button>
+            </div>
+          )}
         </>
       )}
 

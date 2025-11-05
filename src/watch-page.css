@@ -40,40 +40,63 @@
   to { opacity: 1; }
 }
 
-/* Bumper controls */
-.watch-bumper-controls {
+/* JOIN STREAM overlay */
+.watch-join-overlay {
   position: absolute;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 201;
   display: flex;
-  gap: 12px;
-}
-
-.watch-bumper-btn {
-  padding: 12px 20px;
-  background: rgba(0, 0, 0, 0.8);
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  animation: fadeIn 0.3s ease-in;
+}
+
+.watch-join-btn {
+  padding: 20px 48px;
+  background: linear-gradient(135deg, #ff0066 0%, #ff3385 100%);
   color: #fff;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 50px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  box-shadow: 0 8px 24px rgba(255, 0, 102, 0.4);
+  transition: all 0.3s ease;
   -webkit-tap-highlight-color: transparent;
+  animation: pulseGlow 2s ease-in-out infinite;
 }
 
-.watch-bumper-btn:hover {
-  background: rgba(255, 0, 102, 0.3);
-  border-color: rgba(255, 0, 102, 0.8);
+.watch-join-btn:hover {
   transform: scale(1.05);
+  box-shadow: 0 12px 32px rgba(255, 0, 102, 0.6);
 }
 
-.watch-bumper-btn:active {
-  transform: scale(0.95);
+.watch-join-btn:active {
+  transform: scale(0.98);
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 8px 24px rgba(255, 0, 102, 0.4);
+  }
+  50% {
+    box-shadow: 0 8px 32px rgba(255, 0, 102, 0.7);
+  }
+}
+
+@media (max-width: 640px) {
+  .watch-join-btn {
+    padding: 18px 40px;
+    font-size: 16px;
+  }
 }
 
 /* Header */
