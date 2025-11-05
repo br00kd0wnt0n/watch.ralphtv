@@ -220,15 +220,33 @@
 /* Controls */
 .watch-controls {
   position: absolute;
-  bottom: 24px;
+  bottom: 80px; /* High enough to clear browser chrome */
   left: 0;
   right: 0;
   z-index: 100;
-  padding: 20px 16px calc(env(safe-area-inset-bottom, 16px) + 12px);
+  padding: 20px 16px 16px;
   background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 70%, transparent 100%);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* PWA mode (standalone) - move controls even higher */
+@media (display-mode: standalone) {
+  .watch-controls {
+    bottom: 100px; /* Extra space in PWA for easier thumb reach */
+    padding: 24px 16px 20px;
+  }
+}
+
+/* iOS PWA specific */
+@supports (-webkit-touch-callout: none) {
+  @media (display-mode: standalone) {
+    .watch-controls {
+      bottom: 120px; /* Even more space on iOS PWA */
+      padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 20px);
+    }
+  }
 }
 
 .watch-controls.visible {
@@ -421,8 +439,16 @@
   }
 
   .watch-controls {
+    bottom: 40px; /* Less space needed in landscape */
     padding-top: 12px;
-    padding-bottom: calc(env(safe-area-inset-bottom, 12px) + 4px);
+    padding-bottom: 12px;
+  }
+
+  /* PWA landscape */
+  @media (display-mode: standalone) {
+    .watch-controls {
+      bottom: 50px;
+    }
   }
 
   .watch-logo {
