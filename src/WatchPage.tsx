@@ -67,37 +67,86 @@ export default function WatchPage() {
     console.log('Initializing stream:', streamUrl);
 
     if (Hls.isSupported()) {
-      console.log('Using HLS.js');
+      console.log('Using HLS.js (Chrome/Firefox)');
       const hls = new Hls({
+        debug: false,
         enableWorker: true,
         lowLatencyMode: true,
-        maxBufferLength: 10,
-        maxMaxBufferLength: 20,
+        backBufferLength: 90,
+        maxBufferLength: 30,
+        maxMaxBufferLength: 60,
         liveSyncDurationCount: 3,
+        liveMaxLatencyDurationCount: 10,
+        manifestLoadingTimeOut: 10000,
+        manifestLoadingMaxRetry: 4,
+        manifestLoadingRetryDelay: 1000,
+        levelLoadingTimeOut: 10000,
+        levelLoadingMaxRetry: 4,
+        fragLoadingTimeOut: 20000,
+        fragLoadingMaxRetry: 6,
+        xhrSetup: function (xhr, url) {
+          xhr.withCredentials = false; // Disable CORS credentials
+        },
       });
 
       hlsRef.current = hls;
-      hls.loadSource(streamUrl);
-      hls.attachMedia(video);
+
+      hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+        console.log('HLS media attached');
+      });
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         console.log('HLS manifest parsed, starting playback');
         setStatus('playing');
         video.play().then(() => {
-          console.log('Video playing');
+          console.log('Video playing successfully');
           setIsPlaying(true);
         }).catch((err) => {
           console.error('Play failed:', err);
-          setStatus('loading');
+          // Try again with muted first, then unmute
+          video.muted = true;
+          video.play().then(() => {
+            console.log('Playing muted, will unmute');
+            video.muted = false;
+            setIsPlaying(true);
+          }).catch((err2) => {
+            console.error('Play failed even muted:', err2);
+            setStatus('error');
+          });
         });
       });
 
       hls.on(Hls.Events.ERROR, (_event, data) => {
-        console.error('HLS error:', data);
+        console.error('HLS error:', data.type, data.details, data.fatal);
+
         if (data.fatal) {
-          setStatus('error');
+          switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              console.log('Network error, attempting recovery...');
+              hls.startLoad();
+              break;
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              console.log('Media error, attempting recovery...');
+              hls.recoverMediaError();
+              break;
+            default:
+              console.error('Fatal error, cannot recover');
+              setStatus('error');
+              hls.destroy();
+              break;
+          }
         }
       });
+
+      hls.on(Hls.Events.FRAG_LOADED, () => {
+        if (status !== 'playing') {
+          console.log('Fragment loaded, updating status to playing');
+          setStatus('playing');
+        }
+      });
+
+      hls.loadSource(streamUrl);
+      hls.attachMedia(video);
 
       return () => {
         console.log('Cleaning up HLS');
