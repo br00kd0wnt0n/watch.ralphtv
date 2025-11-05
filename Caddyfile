@@ -1,8 +1,0 @@
-:{$PORT} {
-	root * /app/dist
-	encode gzip
-
-	# Try to serve the file, otherwise serve index.html
-	try_files {path} /index.html
-	file_server
-}
