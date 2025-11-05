@@ -12,7 +12,7 @@ export default function WatchPage() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [status, setStatus] = useState<'loading' | 'playing' | 'error' | 'offline'>('loading');
   const [showControls, setShowControls] = useState(true);
-  const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const controlsTimeoutRef = useRef<number | null>(null);
 
   const streamUrl = `${CONFIG.RELAY_BASE_URL}/hls/stream.m3u8`;
 
