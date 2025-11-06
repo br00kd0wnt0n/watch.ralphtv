@@ -1,0 +1,182 @@
+/* Notification Status Badge */
+.notification-status {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 300;
+  padding: 8px 14px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: slideInRight 0.3s ease;
+}
+
+.notification-status.enabled {
+  background: rgba(0, 200, 0, 0.2);
+  border: 1px solid rgba(0, 200, 0, 0.4);
+  color: #00ff00;
+}
+
+.notification-status.denied {
+  background: rgba(128, 128, 128, 0.2);
+  border: 1px solid rgba(128, 128, 128, 0.4);
+  color: #999;
+}
+
+.notification-icon {
+  font-size: 14px;
+}
+
+.notification-text {
+  font-size: 11px;
+  letter-spacing: 0.3px;
+}
+
+/* Notification Prompt */
+.notification-prompt {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  animation: slideInUp 0.4s ease;
+}
+
+.notification-prompt-content {
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  max-width: 90vw;
+}
+
+.notification-prompt-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.notification-prompt-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-prompt-title {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.notification-prompt-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+}
+
+.notification-prompt-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.notification-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.notification-btn-primary {
+  background: linear-gradient(135deg, #ff0066 0%, #ff3385 100%);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(255, 0, 102, 0.4);
+}
+
+.notification-btn-primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(255, 0, 102, 0.6);
+}
+
+.notification-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.notification-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.notification-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.notification-btn-secondary:active {
+  transform: scale(0.98);
+}
+
+/* Animations */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .notification-prompt {
+    bottom: 140px;
+  }
+
+  .notification-prompt-content {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .notification-prompt-icon {
+    font-size: 28px;
+  }
+
+  .notification-prompt-title {
+    font-size: 13px;
+  }
+
+  .notification-prompt-subtitle {
+    font-size: 11px;
+  }
+
+  .notification-btn {
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+}

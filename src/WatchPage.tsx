@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Hls from 'hls.js';
 import { CONFIG } from './config';
+import NotificationPrompt from './components/NotificationPrompt';
 import './watch-page.css';
 
 export default function WatchPage() {
@@ -403,6 +404,9 @@ export default function WatchPage() {
         </div>
       </div>
       )}
+
+      {/* Notification Prompt */}
+      <NotificationPrompt />
     </div>
   );
 }
