@@ -3,18 +3,12 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import { CONFIG } from './config.ts';
 
-// Register service worker and set up notifications
+// Register service worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
       const registration = await navigator.serviceWorker.register('/sw.js');
       console.log('Service Worker registered:', registration);
-
-      // Request notification permission
-      if ('Notification' in window && Notification.permission === 'default') {
-        const permission = await Notification.requestPermission();
-        console.log('Notification permission:', permission);
-      }
 
       // Send relay URL to service worker
       if (registration.active && CONFIG.RELAY_BASE_URL) {

@@ -18,6 +18,7 @@ export default function WatchPage() {
   const [status, setStatus] = useState<'loading' | 'playing' | 'error' | 'offline'>('loading');
   const [showControls, setShowControls] = useState(true);
   const controlsTimeoutRef = useRef<number | null>(null);
+  const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
 
   const streamUrl = `${CONFIG.RELAY_BASE_URL}/hls/stream.m3u8`;
 
@@ -102,6 +103,8 @@ export default function WatchPage() {
         video.play().then(() => {
           console.log('Video playing successfully');
           setIsPlaying(true);
+          // Show notification prompt after stream starts (delay 5 seconds)
+          setTimeout(() => setShowNotificationPrompt(true), 5000);
         }).catch((err) => {
           console.error('Play failed:', err);
           // Try again with muted first, then unmute
@@ -110,6 +113,8 @@ export default function WatchPage() {
             console.log('Playing muted, will unmute');
             video.muted = false;
             setIsPlaying(true);
+            // Show notification prompt after stream starts (delay 5 seconds)
+            setTimeout(() => setShowNotificationPrompt(true), 5000);
           }).catch((err2) => {
             console.error('Play failed even muted:', err2);
             setStatus('error');
@@ -164,6 +169,8 @@ export default function WatchPage() {
         video.play().then(() => {
           console.log('Video playing');
           setIsPlaying(true);
+          // Show notification prompt after stream starts (delay 5 seconds)
+          setTimeout(() => setShowNotificationPrompt(true), 5000);
         }).catch((err) => {
           console.error('Play failed:', err);
           setStatus('loading');
@@ -417,8 +424,8 @@ export default function WatchPage() {
       </div>
       )}
 
-      {/* Notification Prompt */}
-      <NotificationPrompt />
+      {/* Notification Prompt - only show after stream starts */}
+      <NotificationPrompt show={showNotificationPrompt} />
     </div>
   );
 }

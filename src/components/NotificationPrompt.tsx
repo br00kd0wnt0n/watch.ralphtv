@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
 import './notification-prompt.css';
 
-export default function NotificationPrompt() {
+interface NotificationPromptProps {
+  show: boolean;
+}
+
+export default function NotificationPrompt({ show }: NotificationPromptProps) {
   const [permission, setPermission] = useState<NotificationPermission>('default');
-  const [showPrompt, setShowPrompt] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
     if ('Notification' in window) {
       setPermission(Notification.permission);
-      // Show prompt if permission not granted
-      if (Notification.permission === 'default') {
-        // Wait 3 seconds before showing prompt
-        setTimeout(() => setShowPrompt(true), 3000);
-      }
     }
   }, []);
 
@@ -20,7 +19,7 @@ export default function NotificationPrompt() {
     if ('Notification' in window) {
       const result = await Notification.requestPermission();
       setPermission(result);
-      setShowPrompt(false);
+      setDismissed(true);
 
       if (result === 'granted') {
         // Show confirmation notification
@@ -36,7 +35,8 @@ export default function NotificationPrompt() {
     return null; // Browser doesn't support notifications
   }
 
-  if (permission === 'granted') {
+  // Only show status badges when stream is playing (show is true)
+  if (show && permission === 'granted') {
     return (
       <div className="notification-status enabled">
         <span className="notification-icon">🔔</span>
@@ -45,7 +45,7 @@ export default function NotificationPrompt() {
     );
   }
 
-  if (permission === 'denied') {
+  if (show && permission === 'denied') {
     return (
       <div className="notification-status denied">
         <span className="notification-icon">🔕</span>
@@ -54,7 +54,8 @@ export default function NotificationPrompt() {
     );
   }
 
-  if (!showPrompt) {
+  // Only show prompt if explicitly told to show, permission is default, and not dismissed
+  if (!show || permission !== 'default' || dismissed) {
     return null;
   }
 
@@ -75,7 +76,7 @@ export default function NotificationPrompt() {
           </button>
           <button
             className="notification-btn notification-btn-secondary"
-            onClick={() => setShowPrompt(false)}
+            onClick={() => setDismissed(true)}
           >
             Later
           </button>
