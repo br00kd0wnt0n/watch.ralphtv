@@ -439,15 +439,15 @@
   }
 
   .watch-controls {
-    bottom: 40px; /* Less space needed in landscape */
-    padding-top: 12px;
-    padding-bottom: 12px;
+    bottom: 12px; /* Lower in landscape to avoid overlap */
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 
   /* PWA landscape */
   @media (display-mode: standalone) {
     .watch-controls {
-      bottom: 50px;
+      bottom: 16px;
     }
   }
 

@@ -228,14 +228,26 @@ export default function WatchPage() {
 
   // Update volume
   const handleVolumeChange = (newVolume: number) => {
-    if (!videoRef.current) return;
+    console.log('Volume change:', newVolume);
     setVolume(newVolume);
-    videoRef.current.volume = newVolume;
-    if (newVolume > 0 && isMuted) {
-      setIsMuted(false);
-      videoRef.current.muted = false;
+
+    if (videoRef.current) {
+      videoRef.current.volume = newVolume;
+      if (newVolume > 0 && isMuted) {
+        setIsMuted(false);
+        videoRef.current.muted = false;
+      }
     }
   };
+
+  // Apply volume to video when it loads
+  useEffect(() => {
+    if (videoRef.current && !showBumper) {
+      videoRef.current.volume = volume;
+      videoRef.current.muted = isMuted;
+      console.log('Applied volume to video:', volume);
+    }
+  }, [showBumper, volume, isMuted]);
 
   return (
     <div
